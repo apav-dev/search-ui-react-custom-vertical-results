@@ -1,8 +1,12 @@
 import { CardProps } from "@yext/search-ui-react";
-import Ce_pokemon from "../types/pokemon";
-import { C_sprites } from "../types/pokemon";
+import Ce_pokemon from "./pokemon";
+import { C_sprites } from "./pokemon";
 
-const PokeCard = ({ result }: CardProps<Ce_pokemon>) => {
+type PokeCard = CardProps<Ce_pokemon> & {
+  logo?: string;
+};
+
+const PokeCard = ({ result, logo }: PokeCard) => {
   const pokemon = result.rawData;
   const { frontDefault: mainImage } = pokemon.c_sprites as C_sprites;
 
@@ -42,10 +46,12 @@ const PokeCard = ({ result }: CardProps<Ce_pokemon>) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4">
-      <div className="flex justify-between items-center mb-2">
+    <div className="rounded-lg bg-white p-4 shadow-md">
+      <div className="mb-2 flex items-center justify-between">
         <h2 className="text-xl font-semibold">{pokemon.name}</h2>
-        <span className="text-gray-500">#{pokemon.c_pokedexNumber}</span>
+        <span className="text-gray-500">
+          <img className="h-4 w-4" src={logo} />
+        </span>
       </div>
       <div className="flex justify-center">
         {mainImage && (
@@ -56,13 +62,13 @@ const PokeCard = ({ result }: CardProps<Ce_pokemon>) => {
           />
         )}
       </div>
-      <div className="space-x-2 mt-4">
+      <div className="mt-4 space-x-2">
         {pokemon.c_types?.map((type) => (
           <span
             key={type.name}
             className={`px-2 py-1 ${getTypeColor(
               type.name || ""
-            )} text-gray-100 rounded-full`}
+            )} rounded-full text-gray-100`}
           >
             {formatStatName(type.name)}
           </span>
